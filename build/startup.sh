@@ -4,8 +4,8 @@ set -e
 
 ################################## VARIABLES ###################################
 
-mainuser_name=${MAINUSER_NAME:-mainuser}
-mainuser_nopassword=${MAINUSER_NOPASSWORD:-false}
+readonly mainuser_name=${MAINUSER_NAME:-mainuser}
+readonly mainuser_nopassword=${MAINUSER_NOPASSWORD:-false}
 
 ################### INCLUDE SCRIPTS FROM /opt/startup-early ####################
 
