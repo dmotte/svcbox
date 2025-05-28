@@ -38,7 +38,7 @@ else
 
     if [ "$mainuser_nopassword" = true ]; then
         echo "Enabling sudo without password for user $mainuser_name"
-        install -m440 <(echo "$mainuser_name ALL=(ALL) NOPASSWD: ALL") \
+        install -Tm440 <(echo "$mainuser_name ALL=(ALL) NOPASSWD: ALL") \
             "/etc/sudoers.d/$mainuser_name-nopassword"
     fi
 fi
@@ -60,9 +60,9 @@ cp -nt/ssh-host-keys /etc/ssh/ssh_host_*_key.pub 2>/dev/null || :
 ############################### SSH CLIENT KEYS ################################
 
 if [ ! -e "$mainuser_home/.ssh/authorized_keys" ]; then
-    install -d -o"$mainuser_name" -g"$mainuser_name" -m700 "$mainuser_home/.ssh"
+    install -o"$mainuser_name" -g"$mainuser_name" -dm700 "$mainuser_home/.ssh"
     # shellcheck disable=SC3001
-    install -o"$mainuser_name" -g"$mainuser_name" -m600 \
+    install -o"$mainuser_name" -g"$mainuser_name" -Tm600 \
         <(cat /ssh-client-keys/*.pub 2>/dev/null || :) \
         "$mainuser_home/.ssh/authorized_keys"
 fi
