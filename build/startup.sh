@@ -46,23 +46,23 @@ fi
 ################################ SSH HOST KEYS #################################
 
 # Get host keys from the volume
-rm -f /etc/ssh/ssh_host_*_key /etc/ssh/ssh_host_*_key.pub
-install -m600 -t/etc/ssh /ssh-host-keys/ssh_host_*_key 2>/dev/null || :
-install -m644 -t/etc/ssh /ssh-host-keys/ssh_host_*_key.pub 2>/dev/null || :
+rm -fv /etc/ssh/ssh_host_*_key /etc/ssh/ssh_host_*_key.pub
+install -vm600 -t/etc/ssh /ssh-host-keys/ssh_host_*_key 2>/dev/null || :
+install -vm644 -t/etc/ssh /ssh-host-keys/ssh_host_*_key.pub 2>/dev/null || :
 
 # Generate the missing host keys
 ssh-keygen -A
 
 # Copy the (previously missing) generated host keys to the volume
-cp -nt/ssh-host-keys /etc/ssh/ssh_host_*_key 2>/dev/null || :
-cp -nt/ssh-host-keys /etc/ssh/ssh_host_*_key.pub 2>/dev/null || :
+cp -nvt/ssh-host-keys /etc/ssh/ssh_host_*_key 2>/dev/null || :
+cp -nvt/ssh-host-keys /etc/ssh/ssh_host_*_key.pub 2>/dev/null || :
 
 ############################### SSH CLIENT KEYS ################################
 
 if [ ! -e "$mainuser_home/.ssh/authorized_keys" ]; then
-    install -o"$mainuser_name" -g"$mainuser_name" -dm700 "$mainuser_home/.ssh"
+    install -o"$mainuser_name" -g"$mainuser_name" -dvm700 "$mainuser_home/.ssh"
     # shellcheck disable=SC3001
-    install -o"$mainuser_name" -g"$mainuser_name" -Tm600 \
+    install -o"$mainuser_name" -g"$mainuser_name" -Tvm600 \
         <(cat /ssh-client-keys/*.pub 2>/dev/null || :) \
         "$mainuser_home/.ssh/authorized_keys"
 fi

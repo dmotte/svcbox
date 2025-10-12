@@ -5,7 +5,7 @@ EXPOSE 22
 RUN apt-get update && \
     apt-get install -y sudo supervisor openssh-server && \
     rm -rf /var/lib/apt/lists/* && \
-    rm -f /etc/ssh/ssh_host_*_key /etc/ssh/ssh_host_*_key.pub && \
+    rm -fv /etc/ssh/ssh_host_*_key /etc/ssh/ssh_host_*_key.pub && \
     mkdir -p /run/sshd && \
     sed -Ei /etc/ssh/sshd_config \
         -e 's/^#?PermitRootLogin[ \t].*$/PermitRootLogin no/' \
@@ -15,7 +15,7 @@ RUN apt-get update && \
 
 COPY --chown=root:root --chmod=755 startup.sh /
 
-RUN install -dm700 /opt/startup-early /opt/startup-late \
+RUN install -dvm700 /opt/startup-early /opt/startup-late \
     /ssh-host-keys /ssh-client-keys
 
 COPY --chown=root:root --chmod=644 supervisord.conf /etc/supervisor/supervisord.conf
