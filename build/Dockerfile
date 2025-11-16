@@ -24,4 +24,4 @@ ENV LC_ALL=C.UTF-8
 RUN echo '#!/bin/bash\n\nexport LC_ALL=C.UTF-8' \
     > /etc/profile.d/set-c-utf8-locale.sh
 
-ENTRYPOINT ["/startup.sh"]
+ENTRYPOINT ["/bin/bash", "/startup.sh"]
