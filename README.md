@@ -31,7 +31,7 @@ Then you can view the logs using this command:
 docker-compose logs -ft
 ```
 
-This image supports **running commands at container startup** by mounting custom scripts at `/opt/startup-early/*.sh` and `/opt/startup-late/*.sh`. This is the same approach used by [dmotte/desktainer](https://github.com/dmotte/desktainer).
+This image supports **running commands at container startup** by mounting custom scripts at `/opt/startup-early/*.sh` and `/opt/startup-late/*.sh`.
 
 ## Environment variables
 
