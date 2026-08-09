@@ -82,3 +82,5 @@ done
 # inside the container
 echo 'Starting supervisord'
 exec /usr/bin/supervisord -nc /etc/supervisor/supervisord.conf
+
+# TODO fix this file

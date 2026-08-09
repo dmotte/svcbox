@@ -51,3 +51,38 @@ docker-compose down && docker-compose up --build
 ```
 
 > **Note**: I know that this Docker image has many **layers**, but this shouldn't be a problem in most cases. If you want to reduce its number of layers, there are several techniques out there, e.g. see [this](https://stackoverflow.com/questions/39695031/how-make-docker-layer-to-single-layer)
+
+## TODO
+
+Rework this project like you did with `desktainer`. Take inspiration from it, in particular for the `supervisord` part.
+
+Remember to use `/tmp` for the `supervisorctl` socket (you'll need to change `/etc/supervisor/supervisord.conf` in `Dockerfile` using `sed`), as the default path `/var/run/supervisor.sock` is not writable by unprivileged users.
+
+Use `find /tmp -mindepth 1 -delete` at startup, so you remove the `supervisorctl` socket (if any) and other things that may be there.
+
+Things to put in this image: tini, userngo, sshset, supervisord, supervisorctl (optional with `SVCBOX_SUPERVISORCTL=true`), sshd (optional with `SVCBOX_SSHD=true`), embedded logtosupd instance (no more generic standalone `logtosupd.sh` external script to maintain).
+
+For this image you might need the `/etc/profile.d/set-c-utf8-locale.sh` trick (I guess even better with a numeric prefix, like `50-set-c-utf8-locale.sh`), as `sshd` doesn't pass the env vars down to the shells spawned by the clients. But please check! Try to run a CLI app that needs it. If such trick is really needed, maybe, at this point, it's better to put it everywhere where you use `LC_ALL=C.UTF-8`?
+
+For `logtosupd`:
+
+- Program `[program:logtosupd]`: creates a socket file, and everything you write to it will appear in the `supervisord` stdout, prefixed by `logtosupd: ` or something like that
+- Program `[program:log-sshd]`: forwards some log lines from the sshd-related files in `/var/log/supervisor/...` to `logtosupd` (prefixing them by `sshd: ` or something like that), maybe using a dedicated custom Bash script to grep only the required lines. This program will also serve as example to know how to write other ones for custom user services.
+  - Example commands:
+    - `tail -f /var/log/supervisor/myapp-stdout-* | grep --line-buffered ERROR | withprefix 'myapp.O: '`
+    - `tail -f /var/log/supervisor/myapp-stderr-* | grep --line-buffered ERROR | withprefix 'myapp.E: '`
+
+Implementation idea for `logtosupd`:
+
+```ini
+[program:logtosupd]
+command=/bin/bash -ec 'socat UNIX-LISTEN:/tmp/logtosupd.sock,mode=666,fork,unlink-early - | while IFS= read -r i || [ -n "$i" ]; do echo "logtosupd: $i"; done'
+stdout_logfile=/dev/stdout
+stdout_logfile_maxbytes=0
+stderr_logfile=/dev/stderr
+stderr_logfile_maxbytes=0
+```
+
+Alternatively, think about using a supervisor event listener instead of custom `logtosupd`. See https://pypi.org/project/supervisor-stdout/ (code: https://github.com/coderanger/supervisor-stdout) and examples in `/usr/share/doc/supervisor/examples` (if you use them, cite them as "Inspired by"). I guess you could use a hybrid approach, i.e. install `supervisor-stdout` and use its `result_handler`, but as an `eventlistener` command you can use your own one, with log filtering if needed.
+
+Fix all the README content.
