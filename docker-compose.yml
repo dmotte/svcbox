@@ -4,15 +4,14 @@ services:
     image: docker.io/dmotte/svcbox:latest
     build: build
     restart: always
-    hostname: svcbox
-    ports: ["2222:22"]
+    ports:
+      # - "2222:22" # If running supervisord as root
+      - "2222:2222" # If running supervisord as unprivileged user
     volumes:
-      - ssh-host-keys:/ssh-host-keys
-      - ./ssh-client-keys:/ssh-client-keys
+      # - ./sshset-data-root:/opt/sshset/data # If running supervisord as root
+      - ./sshset-data-unpriv:/opt/sshset/data # If running supervisord as unprivileged user
     environment:
-      MAINUSER_NOPASSWORD: "true"
-
-volumes:
-  ssh-host-keys: {}
-
-# TODO fix this file
+      USERNGO_NAME: myuser
+      USERNGO_SUDOER: "true"
+      USERNGO_NOPASSWD: "true"
+      SVCBOX_SUPERVISORCTL: "true"

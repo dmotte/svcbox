@@ -1,6 +1,9 @@
 /buildx-metadata.txt
 /buildx-image-id.txt
 
-/ssh-client-keys/
-
-# TODO fix this file
+/sshset-data/host-keys/
+/sshset-data/users/*/authorized-keys/
+/sshset-data/authorized-keys/
+/sshset-data-*/host-keys/
+/sshset-data-*/users/*/authorized-keys/
+/sshset-data-*/authorized-keys/
