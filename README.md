@@ -54,17 +54,9 @@ docker-compose down && docker-compose up --build
 
 ## TODO
 
-Rework this project like you did with `desktainer`. Take inspiration from it, in particular for the `supervisord` part.
-
-Remember to use `/tmp` for the `supervisorctl` socket (you'll need to change `/etc/supervisor/supervisord.conf` in `Dockerfile` using `sed`), as the default path `/var/run/supervisor.sock` is not writable by unprivileged users.
-
-Use `find /tmp -mindepth 1 -delete` at startup, so you remove the `supervisorctl` socket (if any) and other things that may be there.
-
-Things to put in this image: tini, userngo, sshset, supervisord, supervisorctl (optional with `SVCBOX_SUPERVISORCTL=true`), sshd (optional with `SVCBOX_SSHD=true`), embedded logtosupd instance (no more generic standalone `logtosupd.sh` external script to maintain).
-
 For this image you might need the `/etc/profile.d/set-c-utf8-locale.sh` trick (I guess even better with a numeric prefix, like `50-set-c-utf8-locale.sh`), as `sshd` doesn't pass the env vars down to the shells spawned by the clients. But please check! Try to run a CLI app that needs it. If such trick is really needed, maybe, at this point, it's better to put it everywhere where you use `LC_ALL=C.UTF-8`?
 
-For `logtosupd`:
+For embedded `logtosupd` instance (no more generic standalone `logtosupd.sh` external script to maintain):
 
 - Program `[program:logtosupd]`: creates a socket file, and everything you write to it will appear in the `supervisord` stdout, prefixed by `logtosupd: ` or something like that
 - Program `[program:log-sshd]`: forwards some log lines from the sshd-related files in `/var/log/supervisor/...` to `logtosupd` (prefixing them by `sshd: ` or something like that), maybe using a dedicated custom Bash script to grep only the required lines. This program will also serve as example to know how to write other ones for custom user services.
