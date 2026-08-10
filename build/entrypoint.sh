@@ -57,8 +57,6 @@ if [ ! -e ~/.supervisor/supervisord.conf ]; then
 
     ############################################################################
 
-    # TODO fix "CRIT Supervisor is running as root..." both here and in desktainer
-
     install -Tvm644 /dev/stdin ~/.supervisor/supervisord.conf << EOF
 [supervisord]
 nodaemon=true
