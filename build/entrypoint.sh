@@ -76,5 +76,3 @@ fi
 ################################################################################
 
 exec /usr/bin/supervisord -nc ~/.supervisor/supervisord.conf
-
-# TODO test this file thoroughly
