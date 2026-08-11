@@ -38,7 +38,7 @@ if [ ! -e ~/.supervisor/supervisord.conf ]; then
         cfg_supervisorctl+="chmod=$supervisor_sock_chmod"$'\n'
 
         cfg_supervisorctl+=$'[rpcinterface:supervisor]\n'
-        cfg_supervisorctl+='supervisor.rpcinterface_factory = '
+        cfg_supervisorctl+='supervisor.rpcinterface_factory='
         cfg_supervisorctl+=$'supervisor.rpcinterface:make_main_rpcinterface\n'
     fi
 
