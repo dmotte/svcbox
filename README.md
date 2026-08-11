@@ -54,8 +54,6 @@ docker-compose down && docker-compose up --build
 
 ## TODO
 
-For this image you might need the `/etc/profile.d/set-c-utf8-locale.sh` trick (I guess even better with a numeric prefix, like `50-set-c-utf8-locale.sh`), as `sshd` doesn't pass the env vars down to the shells spawned by the clients. But please check! Try to run a CLI app that needs it. If such trick is really needed, maybe, at this point, it's better to put it everywhere where you use `LC_ALL=C.UTF-8`?
-
 For embedded `logtosupd` instance (no more generic standalone `logtosupd.sh` external script to maintain):
 
 - Program `[program:logtosupd]`: creates a socket file, and everything you write to it will appear in the `supervisord` stdout, prefixed by `logtosupd: ` or something like that

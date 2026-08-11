@@ -8,6 +8,10 @@ RUN <<'EOF' /bin/bash -e
 
     rm -fv /etc/ssh/ssh_host_*_key /etc/ssh/ssh_host_*_key.pub
 
+    # Force UTF-8 to avoid encoding warnings from some tools (e.g. Perl)
+    printf '%s\n' '# shellcheck shell=sh' 'export LC_ALL=C.UTF-8' |
+        install -Tvm644 /dev/stdin /etc/profile.d/50-c-utf8.sh
+
     install -dvm755 /opt/{userngo,sshset{,/data},svcbox}
 
     # We use the "/tmp" directory for the supervisord socket because the
@@ -30,7 +34,7 @@ ADD --chown=root:root --chmod=755 \
 
 COPY --chown=root:root --chmod=755 *.sh /opt/svcbox/
 
-# To avoid warnings about non-UTF-8 locale # TODO recheck and rethink
+# Force UTF-8 to avoid encoding warnings from some tools (e.g. Perl)
 ENV LC_ALL=C.UTF-8
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/bin/bash", "/opt/userngo/main.sh", \
