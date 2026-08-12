@@ -11,9 +11,9 @@
 
 ## Usage
 
-The first things you need are **host keys** for the OpenSSH server and an **SSH key pair** for a client to be able to connect. See the usage example of [dmotte/docker-portmap-server](https://github.com/dmotte/docker-portmap-server) for how to get them. Note that all the **SSH client keys** must be put directly into the root of the `/ssh-client-keys` volume instead of subdirectories, and the image doesn't generate a key pair automatically if they are missing. Note also that the `authorized_keys` file is not regenerated if it already exists.
+> **Note**: this Docker image runs [userngo](https://github.com/dmotte/misc/tree/main/scripts/userngo) at startup to handle user creation and setup. See https://github.com/dmotte/misc/tree/main/scripts/userngo#examples for documentation and usage examples.
 
-**Warning**: it's a good practice to set the permissions of the root directory of the `/ssh-host-keys` and `/ssh-client-keys` volumes to `700`, to prevent regular users from reading their content.
+> **Note**: this Docker image runs [sshset](https://github.com/dmotte/misc/tree/main/scripts/sshset) to handle SSH configuration, keys, and other files. See https://github.com/dmotte/misc/tree/main/scripts/sshset#examples for documentation and usage examples.
 
 The [`docker-compose.yml`](docker-compose.yml) file contains a complete usage example for this image. Feel free to simplify it and adapt it to your needs. Unless you want to build the image from scratch, comment out the `build: build` line to use the pre-built one from _Docker Hub_ instead.
 
@@ -29,16 +29,7 @@ Then you can view the logs using this command:
 docker-compose logs -ft
 ```
 
-This image supports **running commands at container startup** by mounting custom scripts at `/opt/startup-early/*.sh` and `/opt/startup-late/*.sh`.
-
-## Environment variables
-
-List of supported **environment variables**:
-
-| Variable              | Required               | Description                                                               |
-| --------------------- | ---------------------- | ------------------------------------------------------------------------- |
-| `MAINUSER_NAME`       | No (default: mainuser) | Name of the main user                                                     |
-| `MAINUSER_NOPASSWORD` | No (default: `false`)  | Whether or not the main user should be allowed to `sudo` without password |
+This image includes **`logtosupd`**, an embedded system to gather and process logs from programs running in `supervisord`, and write them directly to `supervisord`'s `stdout`. In order to send logs to `logtosupd`, a program must have `stdout_events_enabled=true` and `stderr_events_enabled=true` defined in the `supervisord` configuration.
 
 ## Development
 
@@ -49,9 +40,3 @@ docker-compose down && docker-compose up --build
 ```
 
 > **Note**: I know that this Docker image has many **layers**, but this shouldn't be a problem in most cases. If you want to reduce its number of layers, there are several techniques out there, e.g. see [this](https://stackoverflow.com/questions/39695031/how-make-docker-layer-to-single-layer)
-
-## TODO
-
-This Docker image includes `logtosupd`, an embedded system to gather and process logs from programs running in `supervisord`, and write them directly to `supervisord`'s `stdout`. In order to send logs to `logtosupd`, a program must have `stdout_events_enabled=true` and `stderr_events_enabled=true` defined in the `supervisord` configuration.
-
-Fix all the README content.
