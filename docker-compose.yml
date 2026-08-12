@@ -10,6 +10,8 @@ services:
     volumes:
       # - ./sshset-data-root:/opt/sshset/data # If running supervisord as root
       - ./sshset-data-unpriv:/opt/sshset/data # If running supervisord as unprivileged user
+      # Custom logs processing logic
+      - ./logtosupd-process.py:/usr/local/lib/python3.13/dist-packages/logtosupd/process.py:ro
     environment:
       USERNGO_NAME: myuser
       USERNGO_SUDOER: "true"

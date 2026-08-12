@@ -54,25 +54,6 @@ docker-compose down && docker-compose up --build
 
 ## TODO
 
-For embedded `logtosupd` instance (no more generic standalone `logtosupd.sh` external script to maintain):
-
-- Program `[program:logtosupd]`: creates a socket file, and everything you write to it will appear in the `supervisord` stdout, prefixed by `logtosupd: ` or something like that
-- Program `[program:log-sshd]`: forwards some log lines from the sshd-related files in `/var/log/supervisor/...` to `logtosupd` (prefixing them by `sshd: ` or something like that), maybe using a dedicated custom Bash script to grep only the required lines. This program will also serve as example to know how to write other ones for custom user services.
-  - Example commands:
-    - `tail -f /var/log/supervisor/myapp-stdout-* | grep --line-buffered ERROR | withprefix 'myapp.O: '`
-    - `tail -f /var/log/supervisor/myapp-stderr-* | grep --line-buffered ERROR | withprefix 'myapp.E: '`
-
-Implementation idea for `logtosupd`:
-
-```ini
-[program:logtosupd]
-command=/bin/bash -ec 'socat UNIX-LISTEN:/tmp/logtosupd.sock,mode=666,fork,unlink-early - | while IFS= read -r i || [ -n "$i" ]; do echo "logtosupd: $i"; done'
-stdout_logfile=/dev/stdout
-stdout_logfile_maxbytes=0
-stderr_logfile=/dev/stderr
-stderr_logfile_maxbytes=0
-```
-
-Alternatively, think about using a supervisor event listener instead of custom `logtosupd`. See https://pypi.org/project/supervisor-stdout/ (code: https://github.com/coderanger/supervisor-stdout) and examples in `/usr/share/doc/supervisor/examples` (if you use them, cite them as "Inspired by"). I guess you could use a hybrid approach, i.e. install `supervisor-stdout` and use its `result_handler`, but as an `eventlistener` command you can use your own one, with log filtering if needed.
+This Docker image includes `logtosupd`, an embedded system to gather and process logs from programs running in `supervisord`, and write them directly to `supervisord`'s `stdout`. In order to send logs to `logtosupd`, a program must have `stdout_events_enabled=true` and `stderr_events_enabled=true` defined in the `supervisord` configuration.
 
 Fix all the README content.

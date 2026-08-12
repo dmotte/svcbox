@@ -53,6 +53,9 @@ if [ ! -e ~/.supervisor/supervisord.conf ]; then
             cfg_programs+='command=/usr/sbin/sshd -Def '
             cfg_programs+=$'%(ENV_HOME)s/.ssh/sshd_config\n'
         fi
+
+        cfg_programs+=$'stdout_events_enabled=true\n'
+        cfg_programs+=$'stderr_events_enabled=true\n'
     fi
 
     ############################################################################
@@ -67,6 +70,13 @@ childlogdir=%(here)s/log
 $cfg_supervisorctl
 
 $cfg_programs
+
+[eventlistener:logtosupd]
+; Heavily inspired by https://github.com/coderanger/supervisor-stdout
+command=/usr/bin/python3 -umlogtosupd
+buffer_size=100
+events=PROCESS_LOG
+result_handler=logtosupd:event_handler
 
 [include]
 files=%(here)s/conf.d/*.conf

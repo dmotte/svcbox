@@ -20,6 +20,8 @@ RUN <<'EOF' /bin/bash -e
         /etc/supervisor/supervisord.conf | sha256sum -c
     sed -i 's|/var/run/supervisor\.sock|/tmp/supervisor.sock|' \
         /etc/supervisor/supervisord.conf
+
+    install -dvm755 /usr/local/lib/python3.13/dist-packages/logtosupd
 EOF
 
 ADD --chown=root:root --chmod=755 \
@@ -33,6 +35,9 @@ ADD --chown=root:root --chmod=755 \
     /opt/sshset/main.sh
 
 COPY --chown=root:root --chmod=755 *.sh /opt/svcbox/
+
+COPY --chown=root:root --chmod=644 logtosupd/*.py \
+    /usr/local/lib/python3.13/dist-packages/logtosupd/
 
 # Force UTF-8 to avoid encoding warnings from some tools (e.g. Perl)
 ENV LC_ALL=C.UTF-8
