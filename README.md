@@ -5,9 +5,7 @@
 [![GitHub main workflow](https://img.shields.io/github/actions/workflow/status/dmotte/svcbox/main.yml?branch=main&logo=github&label=main&style=flat-square)](https://github.com/dmotte/svcbox/actions)
 [![Docker Pulls](https://img.shields.io/docker/pulls/dmotte/svcbox?logo=docker&style=flat-square)](https://hub.docker.com/r/dmotte/svcbox)
 
-:rocket: Docker image with **supervisord** and **sshd**.
-
-If you want a **rootless** version of this image, check out [dmotte/svcbox-rootless](https://github.com/dmotte/svcbox-rootless).
+:rocket: Docker image for running **multiple supervised services**, with **log management** and (optional) **sshd**.
 
 > :package: This image is also on **Docker Hub** as [`dmotte/svcbox`](https://hub.docker.com/r/dmotte/svcbox) and runs on **several architectures** (e.g. amd64, arm64, ...). To see the full list of supported platforms, please refer to the [`.github/workflows/main.yml`](.github/workflows/main.yml) file. If you need an architecture that is currently unsupported, feel free to open an issue.
 
