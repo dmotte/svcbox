@@ -15,7 +15,7 @@
 
 > **Note**: this Docker image runs [sshset](https://github.com/dmotte/misc/tree/main/scripts/sshset) to handle SSH configuration, keys, and other files. See https://github.com/dmotte/misc/tree/main/scripts/sshset#examples for documentation and usage examples.
 
-The [`docker-compose.yml`](docker-compose.yml) file contains a complete usage example for this image. Feel free to simplify it and adapt it to your needs. Unless you want to build the image from scratch, comment out the `build: build` line to use the pre-built one from _Docker Hub_ instead.
+The [`docker-compose.yml`](docker-compose.yml) file contains a usage example for this image. Unless you want to build the image from scratch, comment out the `build: build` line to use the pre-built one from _Docker Hub_ instead.
 
 To start the Docker-Compose stack in daemon (detached) mode:
 
