@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import sys
+
 from supervisor.events import ProcessLogEvent
 
 from . import process as logtosupd_process
@@ -16,4 +18,5 @@ def event_handler(event: ProcessLogEvent, response_bytes: bytes) -> None:
     headers = dict(x.split(':', 1) for x in headers_line.split())
     text_lines = text.splitlines()
 
-    logtosupd_process.exec(event, headers, text_lines)
+    logtosupd_process.exec(event, headers, text_lines, sys.stdout)
+    sys.stdout.flush()
