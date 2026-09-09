@@ -13,7 +13,7 @@ def exec(event: ProcessLogEvent, headers: dict[str, str],
     if ch == 'stderr':
         ch = 'E'
 
-    prefix = f'{headers['processname']}.{ch}: '
+    prefix = f'logtosupd {headers['processname']}.{ch}: '
 
     for line in text_lines:
         if ch == 'E' and not line.startswith((
