@@ -60,7 +60,7 @@ if [ ! -e ~/.supervisor/supervisord.conf ]; then
 
     ############################################################################
 
-    install -Tvm644 /dev/stdin ~/.supervisor/supervisord.conf << EOF
+    install -Tvm644 /dev/stdin ~/.supervisor/supervisord.conf <<EOF
 [supervisord]
 nodaemon=true
 logfile=%(here)s/log/supervisord.log
