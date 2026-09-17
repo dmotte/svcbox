@@ -85,4 +85,13 @@ fi
 
 ################################################################################
 
+scripts=$(find /opt/svcbox/startup -mindepth 1 -maxdepth 1 -type f -name \*.sh)
+scripts=$(printf '%s' "$scripts" | LC_ALL=C sort)
+while IFS= read -r i || [ -n "$i" ]; do
+    echo "Running startup script $i"
+    bash "$i"
+done < <(printf '%s' "$scripts")
+
+################################################################################
+
 exec /usr/bin/supervisord -nc ~/.supervisor/supervisord.conf

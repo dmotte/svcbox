@@ -12,7 +12,7 @@ RUN <<'EOF' /bin/bash -e
     printf '%s\n' '# shellcheck shell=sh' 'export LC_ALL=C.UTF-8' |
         install -Tvm644 /dev/stdin /etc/profile.d/50-c-utf8.sh
 
-    install -dvm755 /opt/{userngo,sshset{,/data},svcbox}
+    install -dvm755 /opt/{userngo,sshset{,/data},svcbox{,/startup}}
 
     # We use the "/tmp" directory for the supervisord socket because the
     # default "/var/run" is not writable by unprivileged users
