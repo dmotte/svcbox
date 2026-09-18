@@ -15,6 +15,15 @@ export HOME=~
 
 ################################################################################
 
+scripts=$(find /opt/svcbox/startup-early -mindepth 1 -maxdepth 1 \
+    -type f -name \*.sh)
+scripts=$(printf '%s' "$scripts" | LC_ALL=C sort)
+while IFS= read -r i || [ -n "$i" ]; do
+    echo "Running startup-early script $i"; bash "$i"
+done < <(printf '%s' "$scripts")
+
+################################################################################
+
 export SSHSET_SETUP_SERVER=${SSHSET_SETUP_SERVER:-$setup_sshd}
 
 if [ "$SSHSET_SETUP_SERVER" = true ] || [ "$SSHSET_SETUP_CLIENT" = true ]; then
@@ -85,11 +94,11 @@ fi
 
 ################################################################################
 
-scripts=$(find /opt/svcbox/startup -mindepth 1 -maxdepth 1 -type f -name \*.sh)
+scripts=$(find /opt/svcbox/startup-late -mindepth 1 -maxdepth 1 \
+    -type f -name \*.sh)
 scripts=$(printf '%s' "$scripts" | LC_ALL=C sort)
 while IFS= read -r i || [ -n "$i" ]; do
-    echo "Running startup script $i"
-    bash "$i"
+    echo "Running startup-late script $i"; bash "$i"
 done < <(printf '%s' "$scripts")
 
 ################################################################################
