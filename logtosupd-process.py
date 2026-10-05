@@ -16,10 +16,12 @@ def exec(event: ProcessLogEvent, headers: dict[str, str],
     prefix = f'logtosupd {headers['processname']}.{ch}: '
 
     for line in text_lines:
-        if ch == 'E' and not line.startswith((
-            'Accepted publickey for ',
-            'Disconnected from user ',
-        )):
+        if headers['processname'] == 'sshd' \
+                and ch == 'E' \
+                and not line.startswith((
+                    'Accepted publickey for ',
+                    'Disconnected from user ',
+                )):
             continue
 
         print(f'{prefix}{line}', file=file_out)
